@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: exampilot-postgres
+    environment:
+      POSTGRES_USER: exampilot
+      POSTGRES_PASSWORD: exampilotpassword
+      POSTGRES_DB: exampilot_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.3
+    container_name: exampilot-meilisearch
+    environment:
+      - MEILI_MASTER_KEY=exampilotmasterkeysecret123
+      - MEILI_ENV=development
+    ports:
+      - "7700:7700"
+    volumes:
+      - meili_data:/meili_data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  meili_data:

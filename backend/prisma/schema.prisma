@@ -1,0 +1,139 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+  CONTENT_MANAGER
+}
+
+enum Importance {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model University {
+  id        String   @id @default(uuid())
+  name      String
+  acronym   String   @unique
+  branches  Branch[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Branch {
+  id           String     @id @default(uuid())
+  name         String     // e.g. CSE, IT, ME
+  universityId String
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  semesters    Semester[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Semester {
+  id        String    @id @default(uuid())
+  number    Int       // e.g. 5
+  branchId  String
+  branch    Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  subjects  Subject[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Subject {
+  id         String   @id @default(uuid())
+  name       String   // e.g. Computer Graphics
+  code       String   @unique // e.g. CS-504
+  semesterId String
+  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  units      Unit[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Unit {
+  id            String         @id @default(uuid())
+  number        Int            // e.g. 1
+  title         String
+  overview      String         @db.Text
+  subjectId     String
+  subject       Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  topics        Topic[]
+  questions     Question[]
+  revisionSheet RevisionSheet?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Topic {
+  id          String     @id @default(uuid())
+  name        String
+  importance  Importance @default(MEDIUM)
+  description String     @db.Text
+  unitId      String
+  unit        Unit       @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Question {
+  id          String     @id @default(uuid())
+  text        String     @db.Text
+  frequency   Int        @default(1)
+  importance  Importance @default(MEDIUM)
+  askedYears  Int[]      // e.g. [2021, 2022, 2024]
+  unitId      String
+  unit        Unit       @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  answer      Answer?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Answer {
+  id                 String   @id @default(uuid())
+  introduction       String   @db.Text
+  diagramDescription String?  @db.Text
+  diagramSvgType     String?  // e.g. 'bresenham', 'cohen-sutherland'
+  explanation        String[] // Array of text paragraphs
+  conclusion         String   @db.Text
+  questionId         String   @unique
+  question           Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model RevisionSheet {
+  id                  String   @id @default(uuid())
+  quickSummary        String   @db.Text
+  formulasOrKeypoints String[]
+  revisionChecklist   String[]
+  unitId              String   @unique
+  unit                Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Analytics {
+  id        String   @id @default(uuid())
+  event     String   // e.g. "VIEW_SUBJECT"
+  payload   String?  @db.Text
+  timestamp DateTime @default(now())
+}
