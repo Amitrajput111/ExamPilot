@@ -121,8 +121,9 @@ Start both servers concurrently from the root directory:
 npm run dev
 ```
 
-- **Frontend Client**: [http://localhost:3002](http://localhost:3002)
-- **Backend API**: [http://localhost:5000](http://localhost:5000)
+- **Frontend Client (Production)**: [https://exampilot-theta.vercel.app](https://exampilot-theta.vercel.app)
+- **Frontend Client (Local Dev)**: [http://localhost:3002](http://localhost:3002)
+- **Backend API (Local Dev)**: [http://localhost:5000](http://localhost:5000)
 
 ---
 
