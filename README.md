@@ -2,6 +2,10 @@
 
 ExamPilot is a premium, developer-grade **University Exam Intelligence Platform** designed to help students optimize their revision by focusing on high-return topics. By analyzing patterns, repeat frequencies, and examiner marking rubrics, ExamPilot ensures students study *only* what matters.
 
+### 🌐 Quick Links
+- 🔗 **Live Production URL**: [https://exampilot-theta.vercel.app](https://exampilot-theta.vercel.app)
+- 🖥️ **GitHub Repository**: [https://github.com/Amitrajput111/ExamPilot](https://github.com/Amitrajput111/ExamPilot)
+
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-brightgreen?logo=vercel&style=flat-square)](https://exampilot-theta.vercel.app)
 [![Next.js Frontend](https://img.shields.io/badge/Frontend-Next.js%2015-blue?logo=next.js&style=flat-square)](./frontend)
 [![NestJS Backend](https://img.shields.io/badge/Backend-NestJS%2011-red?logo=nestjs&style=flat-square)](./backend)
